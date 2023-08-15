@@ -13,10 +13,10 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    
     <!-- Load Google API Client -->
     <script src="https://apis.google.com/js/api.js"></script>
-
+    
     <script>
         gapi.load('client', initClient);
 
@@ -29,7 +29,7 @@
                     "token_uri": "https://oauth2.googleapis.com/token",
                     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                     "client_secret": "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",
-                    "redirect_uris": ["http://127.0.0.1:5500/Php/ppc-penerimaan.html"]
+                    "redirect_uris": ["https://miftakhul-ilman-rifqi.github.io/DisplayGoogleDriveData/ppc-penerimaan.html"]
                 }
             };
 
@@ -40,7 +40,7 @@
                 scope: 'https://www.googleapis.com/auth/drive.readonly'
             }).then(function () {
                 // API client initialized, you can proceed to use Google Drive API functions.
-                listFilesInFolder('1gByKBXrq29zM7-meOp9P4hkRq61l-E7I'); // Call the function to list files in the "PCC" folder
+                listFilesInFolder('1gByKBXrq29zM7-meOp9P4hkRq61l-E7I'); // Call the function to list files in the "PPC" folder
             });
         }
 
@@ -53,12 +53,14 @@
                 var files = response.result.files;
                 if (files && files.length > 0) {
                     var fileList = document.getElementById("fileList");
+                    var ul = document.createElement("ul");
                     for (var i = 0; i < files.length; i++) {
                         var file = files[i];
-                        var fileItem = document.createElement("p");
-                        fileItem.textContent = 'File Name: ' + file.name + ', File ID: ' + file.id;
-                        fileList.appendChild(fileItem);
+                        var li = document.createElement("li");
+                        li.textContent = 'File Name: ' + file.name + ', File ID: ' + file.id;
+                        ul.appendChild(li);
                     }
+                    fileList.appendChild(ul);
                 } else {
                     console.log('No files found in folder.');
                 }
