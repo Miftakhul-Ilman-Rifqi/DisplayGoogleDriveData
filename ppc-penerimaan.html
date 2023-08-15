@@ -8,43 +8,57 @@
 <body>
     <div class="container mt-5">
         <h1 class="text-center">Tambun - Penerimaan</h1>
-     <h1>Daftar File di Google Drive</h1>
-    <ul id="fileList"></ul>
+        <h1>Daftar File di Google Drive</h1>
+        <ul id="fileList"></ul>
 
-    <script>
-        // Ganti dengan API Key Anda
-        var apiKey = "AIzaSyAOBoZHUrCLxlJ_hZ8Igq3gzJDIXm-1Jog";
+        <div id="fileDetails" style="display: none;">
+            <h2>Isi File:</h2>
+            <pre id="fileContent"></pre>
+        </div>
 
-        // ID Folder Google Drive yang ingin Anda tampilkan
-        var folderId = "1gByKBXrq29zM7-meOp9P4hkRq61l-E7I";
+        <script>
+            var apiKey = "AIzaSyAOBoZHUrCLxlJ_hZ8Igq3gzJDIXm-1Jog";
+            var folderId = "1gByKBXrq29zM7-meOp9P4hkRq61l-E7I";
+            var apiUrl = "https://www.googleapis.com/drive/v3/files?q='" + folderId + "'+in+parents&key=" + apiKey;
 
-        // URL Endpoint Google Drive API
-        var apiUrl = "https://www.googleapis.com/drive/v3/files?q='" + folderId + "'+in+parents&key=" + apiKey;
+            function loadFileList() {
+                $.ajax({
+                    url: apiUrl,
+                    dataType: "json",
+                    success: function(data) {
+                        var fileList = data.files;
+                        var fileListElement = document.getElementById("fileList");
 
-        // Fungsi untuk memuat daftar file dari API
-        function loadFileList() {
-            $.ajax({
-                url: apiUrl,
-                dataType: "json",
-                success: function(data) {
-                    var fileList = data.files;
-                    var fileListElement = document.getElementById("fileList");
-
-                    for (var i = 0; i < fileList.length; i++) {
-                        var file = fileList[i];
-                        var listItem = document.createElement("li");
-                        listItem.innerHTML = file.name;
-                        fileListElement.appendChild(listItem);
+                        for (var i = 0; i < fileList.length; i++) {
+                            var file = fileList[i];
+                            var listItem = document.createElement("li");
+                            listItem.innerHTML = file.name;
+                            listItem.addEventListener("click", function() {
+                                showFileDetails(file.id);
+                            });
+                            fileListElement.appendChild(listItem);
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
 
-        // Memanggil fungsi untuk memuat daftar file saat halaman dimuat
-        window.onload = loadFileList;
-    </script>
+            function showFileDetails(fileId) {
+                var fileDetails = document.getElementById("fileDetails");
+                var fileContentElement = document.getElementById("fileContent");
+
+                $.ajax({
+                    url: "https://www.googleapis.com/drive/v3/files/" + fileId + "?key=" + apiKey,
+                    dataType: "json",
+                    success: function(data) {
+                        var fileContent = data.name + "\n" + data.webContentLink;
+                        fileContentElement.textContent = fileContent;
+                        fileDetails.style.display = "block";
+                    }
+                });
+            }
+
+            window.onload = loadFileList;
+        </script>
     </div>
-
-   
 </body>
 </html>
