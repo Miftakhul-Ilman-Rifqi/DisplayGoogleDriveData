@@ -34,7 +34,8 @@
                             var listItem = document.createElement("li");
                             listItem.innerHTML = file.name;
                             listItem.addEventListener("click", function() {
-                                showFileDetails(this.getAttribute("data-file-id"));
+                                var fileId = this.getAttribute("data-file-id");
+                                showFileDetails(fileId);
                             });
                             listItem.setAttribute("data-file-id", file.id);
                             fileListElement.appendChild(listItem);
@@ -48,11 +49,10 @@
                 var fileContentElement = document.getElementById("fileContent");
 
                 $.ajax({
-                    url: "https://www.googleapis.com/drive/v3/files/" + fileId + "?key=" + apiKey,
-                    dataType: "json",
+                    url: "https://www.googleapis.com/drive/v3/files/" + fileId + "?key=" + apiKey + "&alt=media",
+                    dataType: "text",
                     success: function(data) {
-                        var fileContent = data.name + "\n" + data.webContentLink;
-                        fileContentElement.textContent = fileContent;
+                        fileContentElement.textContent = data;
                         fileDetails.style.display = "block";
                     }
                 });
