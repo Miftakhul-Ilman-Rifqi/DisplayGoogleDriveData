@@ -9,42 +9,7 @@
     <div class="container mt-5">
         <h1 class="text-center">Tambun - Penerimaan</h1>
         <h1>Daftar File di Google Drive</h1>
-        <ul id="fileList"></ul>
-
-        <div id="fileDetails" style="display: none;">
-            <h2>Isi File:</h2>
-            <pre id="fileContent"></pre>
-        </div>
-
-        <script>
-            var apiKey = "AIzaSyAOBoZHUrCLxlJ_hZ8Igq3gzJDIXm-1Jog";
-            var folderId = "1gByKBXrq29zM7-meOp9P4hkRq61l-E7I";
-            var apiUrl = "https://www.googleapis.com/drive/v3/files?q='" + folderId + "'+in+parents&key=" + apiKey;
-
-            function loadFileList() {
-                $.ajax({
-                    url: apiUrl,
-                    dataType: "json",
-                    success: function(data) {
-                        var fileList = data.files;
-                        var fileListElement = document.getElementById("fileList");
-
-                        for (var i = 0; i < fileList.length; i++) {
-                            var file = fileList[i];
-                            var listItem = document.createElement("li");
-                            var link = document.createElement("a");
-                            link.innerHTML = file.name;
-                            link.href = "showFile.html?fileId=" + file.id;
-                            link.target = "_blank";
-                            listItem.appendChild(link);
-                            fileListElement.appendChild(listItem);
-                        }
-                    }
-                });
-            }
-
-            window.onload = loadFileList;
-        </script>
+        <iframe src="https://drive.google.com/embeddedfolderview?id=1gByKBXrq29zM7-meOp9P4hkRq61l-E7I#list" style="width:100%; height:600px; border:0;"></iframe>
     </div>
 </body>
 </html>
