@@ -33,36 +33,14 @@
                             var file = fileList[i];
                             var listItem = document.createElement("li");
                             var link = document.createElement("a");
-                            link.textContent = file.name;
-                            link.href = "#";
-                            link.setAttribute("data-file-id", file.id);
-                            link.addEventListener("click", function() {
-                                var fileId = this.getAttribute("data-file-id");
-                                showFileDetails(fileId, file.mimeType);
-                            });
+                            link.innerHTML = file.name;
+                            link.href = "https://drive.google.com/file/d/" + file.id;
+                            link.target = "_blank";
                             listItem.appendChild(link);
                             fileListElement.appendChild(listItem);
                         }
                     }
                 });
-            }
-
-            function showFileDetails(fileId, mimeType) {
-                var fileDetails = document.getElementById("fileDetails");
-                var fileContentElement = document.getElementById("fileContent");
-
-                if (mimeType.includes("spreadsheet") || mimeType.includes("document")) {
-                    fileContentElement.textContent = "File tipe ini tidak dapat ditampilkan di sini.";
-                } else {
-                    $.ajax({
-                        url: "https://www.googleapis.com/drive/v3/files/" + fileId + "?key=" + apiKey + "&alt=media",
-                        dataType: "text",
-                        success: function(data) {
-                            fileContentElement.textContent = data;
-                            fileDetails.style.display = "block";
-                        }
-                    });
-                }
             }
 
             window.onload = loadFileList;
