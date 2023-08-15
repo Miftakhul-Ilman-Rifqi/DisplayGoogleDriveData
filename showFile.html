@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Isi File</title>
+</head>
+<body>
+    <pre id="fileContent"></pre>
+
+    <script>
+        var fileId = new URLSearchParams(window.location.search).get("fileId");
+        var apiKey = "AIzaSyAOBoZHUrCLxlJ_hZ8Igq3gzJDIXm-1Jog";
+        var fileContentElement = document.getElementById("fileContent");
+
+        $.ajax({
+            url: "https://www.googleapis.com/drive/v3/files/" + fileId + "?key=" + apiKey + "&alt=media",
+            dataType: "text",
+            success: function(data) {
+                fileContentElement.textContent = data;
+            }
+        });
+    </script>
+</body>
+</html>
