@@ -11,6 +11,11 @@
         <h1>Daftar File di Google Drive</h1>
         <ul id="fileList"></ul>
 
+        <div id="fileDetails" style="display: none;">
+            <h2>Isi File:</h2>
+            <pre id="fileContent"></pre>
+        </div>
+
         <script>
             var apiKey = "AIzaSyAOBoZHUrCLxlJ_hZ8Igq3gzJDIXm-1Jog";
             var folderId = "1gByKBXrq29zM7-meOp9P4hkRq61l-E7I";
@@ -30,7 +35,7 @@
                             listItem.innerHTML = file.name;
                             listItem.addEventListener("click", function() {
                                 var fileId = this.getAttribute("data-file-id");
-                                openFileInNewTab(fileId, file.mimeType);
+                                showFileDetails(fileId, file.mimeType);
                             });
                             listItem.setAttribute("data-file-id", file.id);
                             fileListElement.appendChild(listItem);
@@ -39,17 +44,21 @@
                 });
             }
 
-            function openFileInNewTab(fileId, mimeType) {
-                var viewerUrl = "https://drive.google.com/viewerng/viewer?embedded=true&url=";
-                var fileUrl = "https://www.googleapis.com/drive/v3/files/" + fileId + "?key=" + apiKey + "&alt=media";
-                var targetUrl = viewerUrl + encodeURIComponent(fileUrl);
+            function showFileDetails(fileId, mimeType) {
+                var fileDetails = document.getElementById("fileDetails");
+                var fileContentElement = document.getElementById("fileContent");
 
-                if (mimeType.includes("spreadsheet")) {
-                    window.open("https://docs.google.com/spreadsheets/d/" + fileId, "_blank");
-                } else if (mimeType.includes("document")) {
-                    window.open("https://docs.google.com/document/d/" + fileId, "_blank");
+                if (mimeType.includes("spreadsheet") || mimeType.includes("document")) {
+                    fileContentElement.textContent = "File tipe ini tidak dapat ditampilkan di sini.";
                 } else {
-                    window.open(targetUrl, "_blank");
+                    $.ajax({
+                        url: "https://www.googleapis.com/drive/v3/files/" + fileId + "?key=" + apiKey + "&alt=media",
+                        dataType: "text",
+                        success: function(data) {
+                            fileContentElement.textContent = data;
+                            fileDetails.style.display = "block";
+                        }
+                    });
                 }
             }
 
