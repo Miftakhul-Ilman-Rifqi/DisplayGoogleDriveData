@@ -34,7 +34,7 @@
                             var listItem = document.createElement("li");
                             var link = document.createElement("a");
                             link.innerHTML = file.name;
-                            link.href = "https://drive.google.com/file/d/" + file.id;
+                            link.href = "showFile.html?fileId=" + file.id;
                             link.target = "_blank";
                             listItem.appendChild(link);
                             fileListElement.appendChild(listItem);
