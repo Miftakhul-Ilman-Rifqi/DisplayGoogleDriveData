@@ -3,69 +3,48 @@
 <head>
     <title>Tambun - Penerimaan</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="text-center">Tambun - Penerimaan</h1>
-        <div id="fileList"></div>
+     <h1>Daftar File di Google Drive</h1>
+    <ul id="fileList"></ul>
+
+    <script>
+        // Ganti dengan API Key Anda
+        var apiKey = "AIzaSyAOBoZHUrCLxlJ_hZ8Igq3gzJDIXm-1Jog";
+
+        // ID Folder Google Drive yang ingin Anda tampilkan
+        var folderId = "1gByKBXrq29zM7-meOp9P4hkRq61l-E7I";
+
+        // URL Endpoint Google Drive API
+        var apiUrl = "https://www.googleapis.com/drive/v3/files?q='" + folderId + "'+in+parents&key=" + apiKey;
+
+        // Fungsi untuk memuat daftar file dari API
+        function loadFileList() {
+            $.ajax({
+                url: apiUrl,
+                dataType: "json",
+                success: function(data) {
+                    var fileList = data.files;
+                    var fileListElement = document.getElementById("fileList");
+
+                    for (var i = 0; i < fileList.length; i++) {
+                        var file = fileList[i];
+                        var listItem = document.createElement("li");
+                        listItem.innerHTML = file.name;
+                        fileListElement.appendChild(listItem);
+                    }
+                }
+            });
+        }
+
+        // Memanggil fungsi untuk memuat daftar file saat halaman dimuat
+        window.onload = loadFileList;
+    </script>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    <!-- Load Google API Client -->
-    <script src="https://apis.google.com/js/api.js"></script>
-    
-    <script>
-        gapi.load('client', initClient);
-
-        function initClient() {
-            const credentials = {
-                "web": {
-                    "client_id": "1009903909482-m34b91e493phsgv44m7s4p8qvu80ggob.apps.googleusercontent.com",
-                    "project_id": "drivefiledisplay",
-                    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                    "token_uri": "https://oauth2.googleapis.com/token",
-                    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                    "client_secret": "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",
-                    "redirect_uris": ["https://miftakhul-ilman-rifqi.github.io/DisplayGoogleDriveData/ppc-penerimaan.html"]
-                }
-            };
-
-            gapi.client.init({
-                apiKey: credentials.web.api_key,
-                clientId: credentials.web.client_id,
-                discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
-                scope: 'https://www.googleapis.com/auth/drive.readonly'
-            }).then(function () {
-                // API client initialized, you can proceed to use Google Drive API functions.
-                listFilesInFolder('1gByKBXrq29zM7-meOp9P4hkRq61l-E7I'); // Call the function to list files in the "PPC" folder
-            });
-        }
-
-        function listFilesInFolder(folderId) {
-            gapi.client.drive.files.list({
-                'q': "'" + folderId + "' in parents", // Query to filter files by parent folder
-                'pageSize': 10,
-                'fields': "nextPageToken, files(id, name)"
-            }).then(function(response) {
-                var files = response.result.files;
-                if (files && files.length > 0) {
-                    var fileList = document.getElementById("fileList");
-                    var ul = document.createElement("ul");
-                    for (var i = 0; i < files.length; i++) {
-                        var file = files[i];
-                        var li = document.createElement("li");
-                        li.textContent = 'File Name: ' + file.name + ', File ID: ' + file.id;
-                        ul.appendChild(li);
-                    }
-                    fileList.appendChild(ul);
-                } else {
-                    console.log('No files found in folder.');
-                }
-            });
-        }
-    </script>
+   
 </body>
 </html>
