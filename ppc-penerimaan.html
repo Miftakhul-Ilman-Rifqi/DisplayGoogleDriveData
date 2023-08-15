@@ -34,8 +34,9 @@
                             var listItem = document.createElement("li");
                             listItem.innerHTML = file.name;
                             listItem.addEventListener("click", function() {
-                                showFileDetails(file.id);
+                                showFileDetails(this.getAttribute("data-file-id"));
                             });
+                            listItem.setAttribute("data-file-id", file.id);
                             fileListElement.appendChild(listItem);
                         }
                     }
