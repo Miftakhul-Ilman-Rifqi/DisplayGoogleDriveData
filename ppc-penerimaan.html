@@ -32,12 +32,15 @@
                         for (var i = 0; i < fileList.length; i++) {
                             var file = fileList[i];
                             var listItem = document.createElement("li");
-                            listItem.innerHTML = file.name;
-                            listItem.addEventListener("click", function() {
+                            var link = document.createElement("a");
+                            link.textContent = file.name;
+                            link.href = "#";
+                            link.setAttribute("data-file-id", file.id);
+                            link.addEventListener("click", function() {
                                 var fileId = this.getAttribute("data-file-id");
                                 showFileDetails(fileId, file.mimeType);
                             });
-                            listItem.setAttribute("data-file-id", file.id);
+                            listItem.appendChild(link);
                             fileListElement.appendChild(listItem);
                         }
                     }
